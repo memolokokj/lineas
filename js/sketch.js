@@ -19,10 +19,6 @@ function setup(){
 	p6 = {x:300, y:0};
 	p7 = {x:300/2, y:0};
 	p8 = {x:300/2, y:300};
-
-
-
-
 }
 
 function draw(){
@@ -48,6 +44,12 @@ function draw(){
 	bresenham(1000, 150, 1000+300, 150);
 	bresenham(1000, 300,1000+300, 0);
 	bresenham(1000+150, 0, 1000+150, 300);
+
+	rect(0, 400, 300, 300);
+	circle(150, 400+150, 300);
+
+	rect(500, 400, 300, 300);
+	ovalo(500+150, 400+150, 150, 50);
 }
 
 function ecuPP(p1, p2){
@@ -165,5 +167,93 @@ function bresenham(x1,y1,x2,y2) {
 		        point(x,y)
 	      	}
 	    }
+	}
+}
+
+function circle(xc, yc, r){
+	let p = Math.round(5 / 4 - r);
+	let x = 0;
+	let y = r;
+
+	printP(xc, x, yc, y);
+
+	while(x < y){
+		x++;
+		if(p < 0){
+			p = p + 2 * x + 1;
+		}
+		else{
+			y--;
+			p = p + 2 * (x - y) + 1;
+		}
+		printP(xc, x, yc, y);
+	}
+
+}
+
+function printP(xc, x, yc, y){
+	point(xc + x, yc + y);
+	point(xc + x, yc - y);
+	point(xc - x, yc + y);
+	point(xc - x, yc - y);
+	point(yc + y, xc + x);
+	point(yc + y, xc - x);
+	point(yc - y, xc + x);
+	point(yc - y, xc - x);
+}
+
+function printP2(xc, x, yc, y){
+	point(xc + x, yc + y);
+	point(xc + x, yc - y);
+	point(xc - x, yc + y);
+	point(xc - x, yc - y);
+}
+
+
+function ovalo(xc, yc, rx, ry){
+	let x, y, p, px, py;
+	let rx2, ry2, tworx2, twory2;
+	ry2 = ry*ry;
+	rx2 = rx*rx;
+	twory2 = 2 * ry2;
+	tworx2 = 2 * rx2;
+
+
+	x = 0;
+	y = ry;
+	printP2(xc, x, yc, y);
+
+	p = Math.round(ry2 - rx2*ry + 0.25*rx2);
+	px = 0;
+	py = tworx2*y;
+	while (px < py){
+		x++;
+		px = px + twory2;
+		if(p < 0){
+			p = p + ry2 + px;
+		}
+		else{
+			y--;
+			py = py - tworx2;
+			p = p + ry2 + px - py;
+		}
+		printP2(xc, x, yc, y);
+	}
+
+	p = Math.round(ry2*(x+0.5)*(x+0.5) + rx2*(y-1)*(y-1) - rx2*ry2);
+	px = 0;
+	py = tworx2*y;
+	while (y > 0){
+		y--;
+		py = py - tworx2;
+		if(p > 0){
+			p = p + rx2 - py;
+		}
+		else{
+			x++;
+			px = px + twory2;
+			p = p + rx2 + py + px;
+		}
+		printP2(xc, x, yc, y);
 	}
 }
